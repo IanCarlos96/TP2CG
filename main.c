@@ -270,7 +270,9 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
-
+    
+   inicializaMateriaisParedes();
+    //configuraIluminacao();
     glutMainLoop();
 
     return EXIT_SUCCESS;

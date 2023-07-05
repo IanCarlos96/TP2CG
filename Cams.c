@@ -13,8 +13,8 @@ void inicializa(){
     // vectorZ = 0.0;
 
     camX = 0.0;
-    camY = 1.0; 
-    camZ = 00.0;
+    camY = 10.0; 
+    camZ = -471.0;
     centerX = 0.0;
     centerY = 0.0; 
     centerZ = 0.0;

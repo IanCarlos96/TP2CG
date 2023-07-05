@@ -13,6 +13,8 @@
 #define max_height 500
 #define min_height -1
 
+#define teto_altura 100
+
 void desenhaCenario();
 
 void desenhaChao();

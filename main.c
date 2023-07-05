@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "Draw.c"
 #include "Lights.c"
+#include <math.h>
 
 static int slices = 160;
 static int stacks = 160;
@@ -157,6 +158,37 @@ static void teclado(unsigned char key, int x, int y)
             }
             break;
             //camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ
+        case 'W':
+        case 'w':
+            camZ++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'S':
+        case 's':
+            camZ--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'A':
+        case 'a':
+            camX--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'D':
+        case 'd':
+            camX++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'q':
+        case 'Q':
+            camY++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'e':
+        case 'E':
+            camY--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+         /* Testes Extras
         case 'x':
             camX++;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
@@ -205,6 +237,7 @@ static void teclado(unsigned char key, int x, int y)
             centerZ--;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
             break;
+        */
     }
 
     glutPostRedisplay();
@@ -228,7 +261,22 @@ GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
 GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLfloat high_shininess[] = { 100.0f };
 
+void mouseMove(GLint movX, GLint movY){
+    GLint deltaX = movX - lastMouseX;
+    GLint deltaY = movY - lastMouseY;
 
+    cameraRotationX += deltaY * 0.1f;
+    cameraRotationY += deltaX * 0.1f;
+
+    lastMouseX = movX;
+    lastMouseY = movY;
+
+    camAngleX = cameraDistance * sin(cameraRotationY * 0.01745f) * cos(cameraRotationX * 0.01745f);
+    camAngleY = cameraDistance * sin(cameraRotationX * 0.01745f);
+    camAngleZ = cameraDistance * cos(cameraRotationY * 0.01745f) * cos(cameraRotationX * 0.01745f);
+    printf("Angles: [%f %f %f]\n", camAngleX, camAngleY, camAngleZ);
+    glutPostRedisplay();
+}
 
 int main(int argc, char *argv[])
 {
@@ -238,12 +286,13 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Ortho vs Frustum");
+    glutCreateWindow("TP2 CG");
 
     glutReshapeFunc(redimensiona);
     //glutDisplayFunc(desenha);
     glutDisplayFunc(desenhaCenario);
     glutKeyboardFunc(teclado);
+    glutPassiveMotionFunc(mouseMove);
     glutIdleFunc(atoa);
 
     glClearColor(1,1,1,1);

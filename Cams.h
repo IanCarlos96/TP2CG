@@ -10,6 +10,15 @@
 
 GLfloat camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ;
 
+GLfloat camAngleX, camAngleY, camAngleZ;
+
+GLint lastMouseX;
+GLint lastMouseY;
+
+GLfloat cameraDistance = 100.0f;
+GLfloat cameraRotationX = 0.0f;
+GLfloat cameraRotationY = 0.0f;
+
 void inicializaCam();
 
 #endif

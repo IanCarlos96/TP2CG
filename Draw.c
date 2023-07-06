@@ -85,7 +85,10 @@ void desenhaCenario()
   glPushMatrix();
   glTranslatef(0.0, 100.0, 0.0);
   glScalef(10.0, 10.0, 10.0);
-  // desenhaArvore();
+  glTranslatef(-8.0, 0.0, -12.0);
+  desenhaArvore();
+  glTranslatef(-5.0, 0.0, -13.0);
+  desenhaArvore();
   glPopMatrix();
 
   glutSwapBuffers();

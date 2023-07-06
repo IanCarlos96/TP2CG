@@ -36,9 +36,6 @@ void desenhaChao()
 
 void desenhaCasa()
 {
-  int texturaPlastico, texturaMadeira;
-  carregaTextura(&texturaPlastico, "plastico.jpg");
-  carregaTextura(&texturaMadeira, "madeira.jpg");
 
   //Parede 1
   glPushMatrix();
@@ -207,20 +204,30 @@ void inicializaMateriaisParedes(void)
   marromFosco.brilhosidade[0] = 0;
 }
 
-void carregaTextura(int *textura, char *nomeDoArquivo)
-{
-  *textura = SOIL_load_OGL_texture(
-      nomeDoArquivo,
-      SOIL_LOAD_AUTO,
-      SOIL_CREATE_NEW_ID,
-      SOIL_FLAG_INVERT_Y);
+void inicializaTexturas(){
 
-  if (*textura == 0)
-  {
-    printf("Erro ao carregar textura '%s': %s\n",
-           nomeDoArquivo,
-           SOIL_last_result());
-  }
+  //texturaPlastico = carregaTextura("plastico.jpg");
+  //texturaMadeira = carregaTextura("madeira.jpg");
+  texturaPlastico = carregaTextura("a.png");
+  texturaMadeira = carregaTextura("b.png");
+  
+
+}
+
+GLint carregaTextura(const char *arquivo)
+{
+    GLuint idTextura = SOIL_load_OGL_texture(
+        arquivo,
+        SOIL_LOAD_AUTO,
+        SOIL_CREATE_NEW_ID,
+        SOIL_FLAG_INVERT_Y);
+
+    if (idTextura == 0)
+    {
+        printf("Erro do SOIL: '%s'\n", SOIL_last_result());
+    }
+
+    return idTextura;
 }
 
 /// TODO: quando for enviar apagar a função abaixo deixei só como exemplo de configurar iluminação
@@ -479,8 +486,7 @@ void desenhaParedePorta(){
 }
 
 void desenhaArvore(void){
-  int texturaMadeira;
-  carregaTextura(&texturaMadeira, "madeira.jpg");
+  
    desenhaEsfera(texturaMadeira, 50);
 
 }

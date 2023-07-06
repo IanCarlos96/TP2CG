@@ -19,8 +19,11 @@ GLfloat light_specular[4];
 GLfloat light_position[4];
 
 void inicializaSol();
+void inicializaLuzes();
 void alteraIntensidadeSol(GLint change);
 
 void configuraProjecao();
+
+void changeLightState(GLint lightNum);
 
 #endif

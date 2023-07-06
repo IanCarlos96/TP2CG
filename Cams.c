@@ -23,4 +23,5 @@ void inicializa(){
     vectorZ = 0.0;
 
     inicializaSol();
+    inicializaLuzes();
 }

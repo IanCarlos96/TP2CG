@@ -138,23 +138,19 @@ static void teclado(unsigned char key, int x, int y)
             break;
 
         case 49:        // tecla 1
-            //Desliga ou liga luz 1
+            changeLightState(GL_LIGHT1);
             break;
         case 50:        // tecla 2
-            //Desliga ou liga luz 1
+            changeLightState(GL_LIGHT2);
             break;
         case 51:        // tecla 3
-            //Desliga ou liga luz 1
+            changeLightState(GL_LIGHT3);
             break;
         case 52:        // tecla 4
-            //Desliga ou liga luz 1
+            changeLightState(GL_LIGHT4);
             break;
         case 53:        // tecla 5
-            if(glIsEnabled(GL_LIGHT0)){
-                glDisable(GL_LIGHT0);
-            } else {
-                glEnable(GL_LIGHT0);
-            }
+            changeLightState(GL_LIGHT0);
             break;
             //camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ
         case 'x':
@@ -254,6 +250,10 @@ int main(int argc, char *argv[])
     glDepthFunc(GL_LESS);
 
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+    glEnable(GL_LIGHT3);
+    glEnable(GL_LIGHT4);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
@@ -272,6 +272,7 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
     
    inicializaMateriaisParedes();
+   inicializaTexturas();
     //configuraIluminacao();
     glutMainLoop();
 

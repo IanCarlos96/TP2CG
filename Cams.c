@@ -3,8 +3,6 @@
 
 void inicializa(){
 
-    yaw = 0.0;
-
     // camX = 150.0;
     // camY = 10.0; 
     // camZ = -150.0;
@@ -35,37 +33,35 @@ void inicializa(){
     // vectorY = 50.0;
     // vectorZ = 0.0;
 
-    camX = 222.0;
-    camY = 50.0; 
-    camZ = 550.0;
-    centerX = 0.0;
-    centerY = 0.0; 
-    centerZ = 100.0;
-    vectorX = 0.0;
-    vectorY = 50.0;
-    vectorZ = 0.0;
+    xCursor = 0.0;
+    yCursor = 50.0; 
+    zCursor = 550.0;
 
     inicializaSol();
     inicializaLuzes();
 }
 
 void controleDeCamera(GLint x, GLint y){
-    //GLfloat mouseDisplacementX = x - (glutGet(GLUT_WINDOW_WIDTH)/2); // (float)glutGet(GLUT_WINDOW_HEIGHT);
-    //GLfloat mouseDisplacementY = y - (glutGet(GLUT_WINDOW_HEIGHT)/2); // (float)glutGet(GLUT_WINDOW_HEIGHT);
+    
+    // variáveis que guardam o vetor 2D de movimento do mouse na tela
+    // xMouse e yMouse são os valores de x e y no frame anterior
+    float xChange = x - xMouse;
+    float yChange = y - yMouse;
 
-    //Meia tela = 180°
-    // displacement = x°
-    //
+    // este exemplo usa coordenadas esféricas para controlar a câmera...
+    // teta e phi guardam a conversão do vetor 2D para um espaço 3D
+    // com coordenada esférica
+    teta = (teta + xChange/150);
+    phi = (phi - yChange/150);
 
-    GLfloat teste = (glutGet(GLUT_WINDOW_WIDTH));
-    //yaw = M_PI * mouseDisplacementX / teste;
-    yaw = M_PI * x / teste;
-    //pitch = M_PI * mouseDisplacementY / (glutGet(GLUT_WINDOW_HEIGHT)/2);
+    if(phi >= 180){
+      //limite de 180 para o phi
+      phi = 180;
+    }
 
-    centerX = -cos(yaw) * raioVisao;
-    centerZ = -sin(yaw) * raioVisao;
-
-    //printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+    // guarda o x e y do mouse para usar na comparação do próximo frame
+    xMouse = x;
+    yMouse = y;
 
     glutPostRedisplay();
 }

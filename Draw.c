@@ -93,7 +93,13 @@ void desenhaCenario()
   configuraProjecao();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+  camera.x = raioVisao * sin(phi) * cos(teta);  //coordenada x denotada em coordenadas esféricas
+  camera.z = raioVisao * sin(phi) * sin(teta); //coordenada z denotada em coordenadas esféricas
+  camera.y = raioVisao * cos(phi);          //coordenada y denotada em coordenadas esféricas
+
+  glLoadIdentity();
+  //gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+  gluLookAt( xCursor+0, yCursor, zCursor+0, xCursor+camera.x, camera.y, zCursor+camera.z, 0, 1, 0); 
 
   desenhaChao();
 

@@ -9,116 +9,11 @@
 static int slices = 160;
 static int stacks = 160;
 
-GLfloat camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ;
-
-char projection = 'p';  // pode ser 'o' também
-
-// void inicializa(){
-//     camX = 0.0;
-//     camY = 0.0; 
-//     camZ = -1.0;
-//     centerX = 0.0;
-//     centerY = 0.0; 
-//     centerZ = 0.0;
-//     vectorX = 0.0;
-//     vectorY = 1.0;
-//     vectorZ = 0.0;
-
-//     inicializaSol();
-// }
-
-// void configuraProjecao() {
-//   float razaoAspecto = (float) glutGet(GLUT_WINDOW_WIDTH) / (float) glutGet(GLUT_WINDOW_HEIGHT);
-
-//   glMatrixMode(GL_PROJECTION);
-//   glLoadIdentity();
-//   switch (projection) {
-//   case 'p':
-//       glFrustum(-razaoAspecto, razaoAspecto, -1.0, 1.0, 2.0, 100.0);
-//       break;
-//   case 'o':
-//       glOrtho(-3*razaoAspecto, 3*razaoAspecto, -3, 3, -100, 100);
-//       break;
-//   }
-
-//   glMatrixMode(GL_MODELVIEW);
-//   glLoadIdentity() ;
-// }
 
 void redimensiona(int width, int height)
 {
     glViewport(0, 0, width, height);
     configuraProjecao();
-}
-
-void desenha()
-{
-    configuraProjecao();
-    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
-    const double a = t*90.0;
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-
-    glColor3d(1,0,0);
-
-    // ESFERA sólida
-    glPushMatrix();
-        glTranslated(-2.4,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidSphere(1,slices,stacks);
-    glPopMatrix();
-
-    // CONE sólido
-    glPushMatrix();
-        glTranslated(0,1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutSolidCone(1,1,slices,stacks);
-    glPopMatrix();
-
-    // CUBO sólido
-    glPushMatrix();
-        glTranslated(2.4,1.2,-6);
-        glRotated(a,0,0,1);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    // ESFERA em modelo de arame
-    glPushMatrix();
-        glTranslated(-2.4,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireSphere(1,slices,stacks);
-    glPopMatrix();
-
-    // CONE em modelo de arame
-    glPushMatrix();
-        glTranslated(0,-1.2,-6);
-        glRotated(60,1,0,0);
-        glRotated(a,0,0,1);
-        glutWireCone(1,1,slices,stacks);
-    glPopMatrix();
-
-    // CUBO em modelo de arame
-    glPushMatrix();
-        glTranslated(2.4,-1.2,-6);
-        glRotated(a,0,0,1);
-        glutWireCube(1);
-    glPopMatrix();
-
-    //Desenhando um quadrado pro chão
-    glColor3f(0.0, 1.0, 0.0);
-    glBegin(GL_QUADS);
-        glVertex3f(min_width, min_height, min_depth);
-        glVertex3f(min_width, min_height, max_depth);
-        glVertex3f(max_width, min_height, max_depth);
-        glVertex3f(max_width, min_height, min_depth);
-    glEnd();
-
-    glutSwapBuffers();
 }
 
 
@@ -153,73 +48,25 @@ static void teclado(unsigned char key, int x, int y)
             changeLightState(GL_LIGHT0);
             break;
             //camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ
-        case 'x':
-            camX++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'X':
-            camX--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'y':
-            camY++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'Y':
-            camY--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'z':
-            camZ++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'Z':
-            camZ--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'c':
-            centerX++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'C':
-            centerX--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'v':
-            centerY++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'V':
-            centerY--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'b':
-            centerZ++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
-        case 'B':
-            centerZ--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
-            break;
         case 'w':
         case 'W':
-            camZ--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            xCursor--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'S':
         case 's':
-            camZ++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            xCursor++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'A':
         case 'a':
-            camX--;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            zCursor++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'D':
         case 'd':
-            camX++;
-            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            zCursor--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
     }
 

@@ -6,17 +6,19 @@
 #include <stdio.h>
 #include <math.h>
 
-#ifndef M_PI
-    #define M_PI 3.14159265358979323846
-    #define M_PI_2 (M_PI/2)
-#endif
-
 #ifndef cams_h
 #define cams_h
 
 #define raioVisao 100
 
-GLfloat camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ, pitch, yaw;
+GLint xMouse = 0, yMouse = 0;     //variáveis globais que serão usadas na função posicionaCamera
+GLint xCursor, yCursor, zCursor;  //guarda o centro do cursor
+GLfloat phi = 90, teta = 0;       //ângulos das coordenadas esféricas
+
+struct {
+  float x, y, z;
+  float targetX, targetY, targetZ;
+} camera;
 
 void inicializaCam();
 

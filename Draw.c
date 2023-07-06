@@ -636,11 +636,6 @@ void desenhaMesa(void)
   glPopMatrix();
 }
 
-void inicializaTextura()
-{
-  carregaTextura(&texturaPlastico, "plastico.jpg");
-  carregaTextura(&texturaMadeira, "madeira.jpg");
-}
 void desenhaComodoTipo1()
 {
   // Parede 1

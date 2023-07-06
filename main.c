@@ -205,6 +205,21 @@ static void teclado(unsigned char key, int x, int y)
             centerZ--;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
             break;
+        case 'o'://aumenta fog
+            if(intensidadeFog<1)
+                intensidadeFog+=0.1;
+                printf("Intensidade fog: %f",intensidadeFog);
+                atualizaFog();
+            break;
+        case 'p'://diminui fog
+            if(intensidadeFog > 0.1)
+                intensidadeFog -= 0.1;
+                if(intensidadeFog == 0){
+                    glDisable(GL_FOG);
+                }
+                printf("Intensidade fog: %f",intensidadeFog);
+                atualizaFog();
+            break;
     }
 
     glutPostRedisplay();
@@ -275,6 +290,7 @@ int main(int argc, char *argv[])
    inicializaMateriaisParedes();
     //configuraIluminacao();
         inicializaTextura();
+        inicializaFog();
     glutMainLoop();
 
     return EXIT_SUCCESS;

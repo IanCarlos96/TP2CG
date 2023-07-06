@@ -47,6 +47,9 @@ typedef struct ladrilho {
     int textura;
 } ladrilho;
 
+
+float intensidadeFog;
+
 void desenhaCenario();
 
 void desenhaChao();
@@ -87,4 +90,8 @@ void desenhaDiscoParcialSemTXT(GLdouble innerRadius, GLdouble outerRadius,GLdoub
 
 //Objeto do lado de fora
 void desenhaArvore(void);
+
+//Neblina
+void atualizaFog();
+void inicializaFog();
 #endif

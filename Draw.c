@@ -5,8 +5,8 @@
 material plasticoAzul, marromFosco;
 ladrilho ladrilhos[4];
 ponto posicaoDaLuz;
-
-int texturaPlastico, texturaMadeira;
+GLfloat intensidadeFog = 0;
+GLint texturaPlastico, texturaMadeira;
 
 void configuraProjecao()
 {
@@ -38,28 +38,25 @@ void desenhaChao()
 
 void desenhaCasa()
 {
-  glColor3f(1.0f,0.0f,0.0f);
+  glColor3f(1.0f, 0.0f, 0.0f);
   glPushMatrix();
   glTranslatef(0.0, 0.0, 0.0);
   desenhaComodoTipo1();
   glPopMatrix();
 
-
-  glColor3f(0.0f,1.0f,0.0f);
+  glColor3f(0.0f, 1.0f, 0.0f);
   glPushMatrix();
-  glTranslatef(212.0, 0.0,0.0);
+  glTranslatef(212.0, 0.0, 0.0);
   desenhaComodoTipo1();
   glPopMatrix();
 
-
-  glColor3f(0.0f,0.0f,1.0f);
+  glColor3f(0.0f, 0.0f, 1.0f);
   glPushMatrix();
   glTranslatef(424.0, 0.0, 0.0);
   desenhaComodoTipo1();
   glPopMatrix();
 
-
-  glColor3f(1.0f,1.0f,1.0f);
+  glColor3f(1.0f, 1.0f, 1.0f);
   glPushMatrix();
   glTranslatef(636.0, 0.0, 0.0);
   desenhaComodoTipo1();
@@ -86,9 +83,9 @@ void desenhaCenario()
 
   desenhaCasa();
   glPushMatrix();
-  glTranslatef(0.0,100.0,0.0);
-  glScalef(10.0,10.0,10.0);
-  //desenhaArvore();
+  glTranslatef(0.0, 100.0, 0.0);
+  glScalef(10.0, 10.0, 10.0);
+  // desenhaArvore();
   glPopMatrix();
 
   glutSwapBuffers();
@@ -245,7 +242,7 @@ void solidSphere(int radius, int stacks, int columns)
   // a esfera
   gluDeleteQuadric(quadObj);
 }
-void solidCilindro(GLdouble baseRadius, GLdouble topRadius,GLdouble height, GLint stacks, GLint columns)
+void solidCilindro(GLdouble baseRadius, GLdouble topRadius, GLdouble height, GLint stacks, GLint columns)
 {
   // cria uma quádrica
   GLUquadric *quadObj = gluNewQuadric();
@@ -264,7 +261,7 @@ void solidCilindro(GLdouble baseRadius, GLdouble topRadius,GLdouble height, GLin
 
   gluDeleteQuadric(quadObj);
 }
-void solidDisco(GLdouble innerRadius,GLdouble outerRadius, GLint stacks, GLint columns)
+void solidDisco(GLdouble innerRadius, GLdouble outerRadius, GLint stacks, GLint columns)
 {
   // cria uma quádrica
   GLUquadric *quadObj = gluNewQuadric();
@@ -283,8 +280,9 @@ void solidDisco(GLdouble innerRadius,GLdouble outerRadius, GLint stacks, GLint c
 
   gluDeleteQuadric(quadObj);
 }
-void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
-    // cria uma quádrica
+void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius, GLdouble startAngle, GLdouble sweepAngle)
+{
+  // cria uma quádrica
   GLUquadric *quadObj = gluNewQuadric();
   // estilo preenchido... poderia ser GLU_LINE, GLU_SILHOUETTE
   // ou GLU_POINT
@@ -295,23 +293,23 @@ void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius,GLdouble startA
   // chama 01 glTexCoord por vértice
   gluQuadricTexture(quadObj, GL_TRUE);
   // cria os vértices de uma cilindro
-  gluPartialDisk(quadObj,innerRadius,outerRadius, 50.0, 50.0, startAngle, sweepAngle);
+  gluPartialDisk(quadObj, innerRadius, outerRadius, 50.0, 50.0, startAngle, sweepAngle);
   // limpa as variáveis que a GLU usou para criar
   // a esfera
 
   gluDeleteQuadric(quadObj);
 }
 
-void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius,GLdouble height){
+void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius, GLdouble height)
+{
   glColor3f(1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textura);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidCilindro(baseRadius,topRadius,height, 50, 50);
+  solidCilindro(baseRadius, topRadius, height, 50, 50);
   glDisable(GL_TEXTURE_2D);
-
 }
 void desenhaEsfera(GLint textura, GLint raio)
 {
@@ -325,50 +323,52 @@ void desenhaEsfera(GLint textura, GLint raio)
   glDisable(GL_TEXTURE_2D);
 }
 
-void desenhaDisco(GLint textura, GLdouble innerRadius,GLdouble outerRadius){
+void desenhaDisco(GLint textura, GLdouble innerRadius, GLdouble outerRadius)
+{
   glColor3f(1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textura);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidDisco(innerRadius,outerRadius, 50.0, 50.0);
+  solidDisco(innerRadius, outerRadius, 50.0, 50.0);
   glDisable(GL_TEXTURE_2D);
 }
 
-void desenhaDiscoParcial(GLint textura, GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
+void desenhaDiscoParcial(GLint textura, GLdouble innerRadius, GLdouble outerRadius, GLdouble startAngle, GLdouble sweepAngle)
+{
   glColor3f(1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textura);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidPartialDisk(innerRadius,outerRadius, 50.0, 50.0);
+  solidPartialDisk(innerRadius, outerRadius, 50.0, 50.0);
   glDisable(GL_TEXTURE_2D);
 }
 
-void desenhaCilindroSemTXT( GLdouble baseRadius, GLdouble topRadius,GLdouble height){
+void desenhaCilindroSemTXT(GLdouble baseRadius, GLdouble topRadius, GLdouble height)
+{
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidCilindro(baseRadius,topRadius,height, 50, 50);
-
-
+  solidCilindro(baseRadius, topRadius, height, 50, 50);
 }
-void desenhaEsferaSemTXT( GLint raio)
+void desenhaEsferaSemTXT(GLint raio)
 {
   glPolygonMode(GL_FRONT, GL_FILL);
   solidSphere(raio, 50, 50);
 }
 
-void desenhaDiscoSemTXT( GLdouble innerRadius,GLdouble outerRadius){
+void desenhaDiscoSemTXT(GLdouble innerRadius, GLdouble outerRadius)
+{
 
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidDisco(innerRadius,outerRadius, 50.0, 50.0);
-
+  solidDisco(innerRadius, outerRadius, 50.0, 50.0);
 }
 
-void desenhaDiscoParcialSemTXT( GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
+void desenhaDiscoParcialSemTXT(GLdouble innerRadius, GLdouble outerRadius, GLdouble startAngle, GLdouble sweepAngle)
+{
   glPolygonMode(GL_FRONT, GL_FILL);
-  solidPartialDisk(innerRadius,outerRadius, 50.0, 50.0);
+  solidPartialDisk(innerRadius, outerRadius, 50.0, 50.0);
 }
 
 void desenhaCubo()
@@ -554,15 +554,15 @@ void desenhaParedePorta()
 void desenhaArvore(void)
 {
   glPushMatrix();
-  glRotatef(90.0,1.0,0.0,0.0);
+  glRotatef(90.0, 1.0, 0.0, 0.0);
   desenhaCilindro(texturaMadeira, 1.0, 2.0, 10.0);
-  glColor3f(0.0f, 0.8f, 0.0f); 
+  glColor3f(0.0f, 0.8f, 0.0f);
   glPushMatrix();
-  glTranslatef(0.0,0.0,-5.0);
+  glTranslatef(0.0, 0.0, -5.0);
   desenhaEsferaSemTXT(1);
-  glTranslatef(0.0,0.0,2.8);
+  glTranslatef(0.0, 0.0, 2.8);
   desenhaEsferaSemTXT(2);
-  glTranslatef(0.0,0.0,4.0);
+  glTranslatef(0.0, 0.0, 4.0);
   desenhaEsferaSemTXT(3);
   glPopMatrix();
   glPopMatrix();
@@ -608,4 +608,25 @@ void desenhaComodoTipo1()
   defMaterialMadeira();
   glTranslatef(-100.0f, 0.0f, 100.0f);
   glPopMatrix();
+}
+
+void inicializaFog(void)
+{
+  GLfloat cor[] = {0.5f, 0.5f, 0.5f};
+  glClearColor(cor[0], cor[1], cor[2], 1.0f);
+
+  glFogi(GL_FOG_MODE, GL_EXP);       // Linear, exp. ou exp²
+  glFogfv(GL_FOG_COLOR, cor);        // Cor
+  glFogf(GL_FOG_DENSITY, 0.0f);     // Densidade
+  glHint(GL_FOG_HINT, GL_DONT_CARE); // Não aplicar se não puder
+  glFogf(GL_FOG_START, 1.0f);        // Profundidade inicial
+  glFogf(GL_FOG_END, 5.0f);          // Profundidade final
+     glEnable(GL_FOG); 
+             // Liga GL_FOG
+}
+
+void atualizaFog() {
+  
+    GLfloat densidade = intensidadeFog * 0.1f;
+    glFogf(GL_FOG_DENSITY, densidade);
 }

@@ -549,6 +549,8 @@ void desenhaParedePorta()
   glScalef(6.0, 30.0, 97.0);
   desenhaCubo();
   glPopMatrix();
+
+
 }
 
 void desenhaArvore(void)
@@ -604,10 +606,13 @@ void desenhaComodoTipo1()
   desenhaParedePorta();
   glPopMatrix();
 
+  //Desenha teto
   glPushMatrix();
-  defMaterialMadeira();
-  glTranslatef(-100.0f, 0.0f, 100.0f);
+  glTranslatef(0.0f, 98.0f, 100.0f);
+  glScalef(97.0, 6.0, 97.0);
+  desenhaCubo();
   glPopMatrix();
+
 }
 
 void inicializaFog(void)

@@ -201,6 +201,26 @@ static void teclado(unsigned char key, int x, int y)
             centerZ--;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
             break;
+        case 'w':
+        case 'W':
+            camZ--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'S':
+        case 's':
+            camZ++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'A':
+        case 'a':
+            camX--;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
+        case 'D':
+        case 'd':
+            camX++;
+            printf("[%f %f %f]Cam\n[%f %f %f]Center\n[%f %f %f]Vector\n", camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+            break;
     }
 
     glutPostRedisplay();
@@ -240,6 +260,7 @@ int main(int argc, char *argv[])
     //glutDisplayFunc(desenha);
     glutDisplayFunc(desenhaCenario);
     glutKeyboardFunc(teclado);
+    glutPassiveMotionFunc(controleDeCamera);
     glutIdleFunc(atoa);
 
     glClearColor(1,1,1,1);
@@ -249,7 +270,7 @@ int main(int argc, char *argv[])
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0); //Sol
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHT2);
     glEnable(GL_LIGHT3);

@@ -15,7 +15,8 @@ void configuraProjecao()
   // Conferir os valores daqui depois
   // glFrustum(-razaoAspecto, razaoAspecto, -1.0, 1.0, 2.0, 100.0);
   // glFrustum(min_width, max_width, min_height, max_height, min_depth, max_depth);
-  glOrtho(min_width, max_width, min_height, max_height, min_depth, max_depth);
+  //glOrtho(min_width, max_width, min_height, max_height, min_depth, max_depth);
+  gluPerspective(45.0f, razaoAspecto, -2, 300);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();

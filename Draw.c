@@ -6,6 +6,8 @@ material plasticoAzul, marromFosco;
 ladrilho ladrilhos[4];
 ponto posicaoDaLuz;
 
+int texturaPlastico, texturaMadeira;
+
 void configuraProjecao()
 {
   float razaoAspecto = (float)glutGet(GLUT_WINDOW_WIDTH) / (float)glutGet(GLUT_WINDOW_HEIGHT);
@@ -36,48 +38,31 @@ void desenhaChao()
 
 void desenhaCasa()
 {
-  int texturaPlastico, texturaMadeira;
-  carregaTextura(&texturaPlastico, "plastico.jpg");
-  carregaTextura(&texturaMadeira, "madeira.jpg");
-
-  //Parede 1
+  glColor3f(1.0f,0.0f,0.0f);
   glPushMatrix();
-  glColor3f(1.0, 1.0, 1.0);
-  glTranslatef(0.0f, 0.0f, 0.0f);
-  glScalef(97.0, 97.0, 6.0);
-  defMaterialPlastico();
-  desenhaCubo();
+  glTranslatef(0.0, 0.0, 0.0);
+  desenhaComodoTipo1();
   glPopMatrix();
 
-  //Parece2
+
+  glColor3f(0.0f,1.0f,0.0f);
   glPushMatrix();
-  defMaterialMadeira();
-  glColor3f(0.2, 0.7, 0);
-  glTranslatef(100.0f, 0.0f, 100.0f);
-  desenhaParedePorta();
+  glTranslatef(212.0, 0.0,0.0);
+  desenhaComodoTipo1();
   glPopMatrix();
 
-  //Parede3
+
+  glColor3f(0.0f,0.0f,1.0f);
   glPushMatrix();
-  glColor3f(0.2, 0.7, 0);
-  glTranslatef(0.0f, 0.0f, 200.0f);
-  glScalef(97.0, 97.0, 6.0);
-  defMaterialMadeira();
-  desenhaCubo();
+  glTranslatef(424.0, 0.0, 0.0);
+  desenhaComodoTipo1();
   glPopMatrix();
 
-  glPushMatrix();
-  defMaterialMadeira();
-  glColor3f(0.2, 0.7, 0);
-  glTranslatef(-100.0f, 0.0f, 100.0f);
-  desenhaParedePorta();
-  glPopMatrix();
 
+  glColor3f(1.0f,1.0f,1.0f);
   glPushMatrix();
-  defMaterialMadeira();
-  glColor3f(0.2, 0.7, 0);
-  glTranslatef(-100.0f, 0.0f, 100.0f);
-  desenhaArvore();
+  glTranslatef(636.0, 0.0, 0.0);
+  desenhaComodoTipo1();
   glPopMatrix();
 
   // piso geral
@@ -100,6 +85,11 @@ void desenhaCenario()
   desenhaChao();
 
   desenhaCasa();
+  glPushMatrix();
+  glTranslatef(0.0,100.0,0.0);
+  glScalef(10.0,10.0,10.0);
+  //desenhaArvore();
+  glPopMatrix();
 
   glutSwapBuffers();
 }
@@ -148,23 +138,15 @@ void desenhaRetanguloSubdividido(int subdivisoes, int direcao)
     // v1     v3     v5     v7
     for (j = 0; j < subdivisoes + 1; j++)
     {
-      if (direcao == 0)
+      float xVertice = larguraDoSubTriangulo * j;
+      switch (direcao)
       {
-        float xVertice = larguraDoSubTriangulo * j;
+
+      case 1:
         glTexCoord2f(xVertice, yVerticesLinhaDeCima);
         glVertex2f(xVertice, yVerticesLinhaDeCima);
         glTexCoord2f(xVertice, yVerticesLinhaDeBaixo);
         glVertex2f(xVertice, yVerticesLinhaDeBaixo);
-      }
-      else
-      {
-
-        float xVertice = larguraDoSubTriangulo * j;
-
-        glTexCoord2f(xVertice, yVerticesLinhaDeBaixo);
-        glVertex2f(xVertice, yVerticesLinhaDeBaixo);
-        glTexCoord2f(xVertice, yVerticesLinhaDeCima);
-        glVertex2f(xVertice, yVerticesLinhaDeCima);
       }
     }
     glEnd();
@@ -181,11 +163,6 @@ void desenhaLadrilho(ladrilho l, int direcao)
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, l.textura);
   glPushMatrix();
-  glTranslatef(l.posicao.x, l.posicao.y, l.posicao.z);
-  if (l.dim.espessura == 10)
-    glScalef(l.dim.largura, l.dim.altura, 1.0);
-  else if (l.dim.largura == 10)
-    glScalef(1.0, l.dim.altura, l.dim.espessura);
   desenhaRetanguloSubdividido(QUANT_SUBDIVISOES, direcao);
   glPopMatrix();
   glDisable(GL_TEXTURE_2D);
@@ -268,7 +245,7 @@ void solidSphere(int radius, int stacks, int columns)
   // a esfera
   gluDeleteQuadric(quadObj);
 }
-void solidCilindro(int radius, int stacks, int columns)
+void solidCilindro(GLdouble baseRadius, GLdouble topRadius,GLdouble height, GLint stacks, GLint columns)
 {
   // cria uma quádrica
   GLUquadric *quadObj = gluNewQuadric();
@@ -280,15 +257,64 @@ void solidCilindro(int radius, int stacks, int columns)
   gluQuadricNormals(quadObj, GLU_SMOOTH);
   // chama 01 glTexCoord por vértice
   gluQuadricTexture(quadObj, GL_TRUE);
-  // cria os vértices de uma esfera
-  gluSphere(quadObj, radius, stacks, columns);
+  // cria os vértices de uma cilindro
+  gluCylinder(quadObj, baseRadius, topRadius, height, stacks, columns);
   // limpa as variáveis que a GLU usou para criar
   // a esfera
+
   gluDeleteQuadric(quadObj);
 }
-void desenhaEsfera(int textura, int raio)
+void solidDisco(GLdouble innerRadius,GLdouble outerRadius, GLint stacks, GLint columns)
 {
+  // cria uma quádrica
+  GLUquadric *quadObj = gluNewQuadric();
+  // estilo preenchido... poderia ser GLU_LINE, GLU_SILHOUETTE
+  // ou GLU_POINT
+  gluQuadricDrawStyle(quadObj, GLU_FILL);
+  // chama 01 glNormal para cada vértice.. poderia ser
+  // GLU_FLAT (01 por face) ou GLU_NONE
+  gluQuadricNormals(quadObj, GLU_SMOOTH);
+  // chama 01 glTexCoord por vértice
+  gluQuadricTexture(quadObj, GL_TRUE);
+  // cria os vértices de uma cilindro
+  gluDisk(quadObj, innerRadius, outerRadius, stacks, columns);
+  // limpa as variáveis que a GLU usou para criar
+  // a esfera
 
+  gluDeleteQuadric(quadObj);
+}
+void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
+    // cria uma quádrica
+  GLUquadric *quadObj = gluNewQuadric();
+  // estilo preenchido... poderia ser GLU_LINE, GLU_SILHOUETTE
+  // ou GLU_POINT
+  gluQuadricDrawStyle(quadObj, GLU_FILL);
+  // chama 01 glNormal para cada vértice.. poderia ser
+  // GLU_FLAT (01 por face) ou GLU_NONE
+  gluQuadricNormals(quadObj, GLU_SMOOTH);
+  // chama 01 glTexCoord por vértice
+  gluQuadricTexture(quadObj, GL_TRUE);
+  // cria os vértices de uma cilindro
+  gluPartialDisk(quadObj,innerRadius,outerRadius, 50.0, 50.0, startAngle, sweepAngle);
+  // limpa as variáveis que a GLU usou para criar
+  // a esfera
+
+  gluDeleteQuadric(quadObj);
+}
+
+void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius,GLdouble height){
+  glColor3f(1, 1, 1);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textura);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidCilindro(baseRadius,topRadius,height, 50, 50);
+  glDisable(GL_TEXTURE_2D);
+
+}
+void desenhaEsfera(GLint textura, GLint raio)
+{
   glColor3f(1, 1, 1);
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textura);
@@ -298,6 +324,53 @@ void desenhaEsfera(int textura, int raio)
   solidSphere(raio, 50, 50);
   glDisable(GL_TEXTURE_2D);
 }
+
+void desenhaDisco(GLint textura, GLdouble innerRadius,GLdouble outerRadius){
+  glColor3f(1, 1, 1);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textura);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidDisco(innerRadius,outerRadius, 50.0, 50.0);
+  glDisable(GL_TEXTURE_2D);
+}
+
+void desenhaDiscoParcial(GLint textura, GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
+  glColor3f(1, 1, 1);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textura);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidPartialDisk(innerRadius,outerRadius, 50.0, 50.0);
+  glDisable(GL_TEXTURE_2D);
+}
+
+void desenhaCilindroSemTXT( GLdouble baseRadius, GLdouble topRadius,GLdouble height){
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidCilindro(baseRadius,topRadius,height, 50, 50);
+
+
+}
+void desenhaEsferaSemTXT( GLint raio)
+{
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidSphere(raio, 50, 50);
+}
+
+void desenhaDiscoSemTXT( GLdouble innerRadius,GLdouble outerRadius){
+
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidDisco(innerRadius,outerRadius, 50.0, 50.0);
+
+}
+
+void desenhaDiscoParcialSemTXT( GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle){
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidPartialDisk(innerRadius,outerRadius, 50.0, 50.0);
+}
+
 void desenhaCubo()
 {
   GLfloat verticesCubo[] = {
@@ -370,7 +443,7 @@ void defMaterialMadeira()
   glMaterialfv(GL_FRONT, GL_SPECULAR, materialUtilizado.especular.v);
   glMaterialfv(GL_FRONT, GL_SHININESS, materialUtilizado.brilhosidade);
 }
-//Ainda não funciona
+// Ainda não funciona
 void desenhaCuboComTextura(GLint textureID)
 {
 
@@ -456,31 +529,83 @@ void desenhaCuboComTextura(GLint textureID)
   glDisable(GL_TEXTURE_GEN_S);
   glDisable(GL_TEXTURE_GEN_T);
 }
-void desenhaParedePorta(){
+void desenhaParedePorta()
+{
 
   glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 56.0f);
-    glScalef(6.0, 33.0, 40.0);
-    desenhaCubo();
+  glTranslatef(0.0f, 0.0f, 56.0f);
+  glScalef(6.0, 33.0, 40.0);
+  desenhaCubo();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(0.0f, 0.0f, -56.0f);
-    glScalef(6.0, 33.0, 40.0);
-    desenhaCubo();
+  glTranslatef(0.0f, 0.0f, -56.0f);
+  glScalef(6.0, 33.0, 40.0);
+  desenhaCubo();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(0.0f, 63.0f, 0.0f);
-    glScalef(6.0, 30.0, 97.0);
-    desenhaCubo();
+  glTranslatef(0.0f, 63.0f, 0.0f);
+  glScalef(6.0, 30.0, 97.0);
+  desenhaCubo();
   glPopMatrix();
-
 }
 
-void desenhaArvore(void){
-  int texturaMadeira;
+void desenhaArvore(void)
+{
+  glPushMatrix();
+  glRotatef(90.0,1.0,0.0,0.0);
+  desenhaCilindro(texturaMadeira, 1.0, 2.0, 10.0);
+  glColor3f(0.0f, 0.8f, 0.0f); 
+  glPushMatrix();
+  glTranslatef(0.0,0.0,-5.0);
+  desenhaEsferaSemTXT(1);
+  glTranslatef(0.0,0.0,2.8);
+  desenhaEsferaSemTXT(2);
+  glTranslatef(0.0,0.0,4.0);
+  desenhaEsferaSemTXT(3);
+  glPopMatrix();
+  glPopMatrix();
+}
+void inicializaTextura()
+{
+  carregaTextura(&texturaPlastico, "plastico.jpg");
   carregaTextura(&texturaMadeira, "madeira.jpg");
-   desenhaEsfera(texturaMadeira, 50);
+}
+void desenhaComodoTipo1()
+{
+  // Parede 1
+  glPushMatrix();
 
+  glTranslatef(0.0f, 0.0f, 0.0f);
+  glScalef(97.0, 97.0, 6.0);
+  defMaterialPlastico();
+  desenhaCubo();
+  glPopMatrix();
+
+  // Parece2
+  glPushMatrix();
+  defMaterialMadeira();
+  glTranslatef(100.0f, 0.0f, 100.0f);
+  desenhaParedePorta();
+  glPopMatrix();
+
+  // Parede3
+  glPushMatrix();
+  glTranslatef(0.0f, 0.0f, 200.0f);
+  glScalef(97.0, 97.0, 6.0);
+  defMaterialMadeira();
+  desenhaCubo();
+  glPopMatrix();
+
+  glPushMatrix();
+  defMaterialMadeira();
+  glTranslatef(-100.0f, 0.0f, 100.0f);
+  desenhaParedePorta();
+  glPopMatrix();
+
+  glPushMatrix();
+  defMaterialMadeira();
+  glTranslatef(-100.0f, 0.0f, 100.0f);
+  glPopMatrix();
 }

@@ -15,6 +15,7 @@
 
 #define QUANT_SUBDIVISOES 20 
 
+int texturaPlastico, texturaMadeira;
 typedef struct coords {
   union {
       float v[4];
@@ -61,4 +62,29 @@ void defMaterialMadeira();
 void defMaterialPlastico();
 void desenhaCuboComTextura(GLint textureID);
 void desenhaParedePorta();
+void desenhaComodoTipo1();
+void inicializaTextura();
+
+/*Criar sólidos primitivos com textura*/
+//Pensando em criar um arquivo só para isso
+void solidSphere(int radius, int stacks, int columns);
+void solidCilindro(GLdouble baseRadius, GLdouble topRadius,GLdouble height, GLint stacks, GLint columns);
+void solidDisco(GLdouble innerRadius,GLdouble outerRadius, GLint stacks, GLint columns);
+void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle);
+
+//Com textura
+void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius,GLdouble height);
+void desenhaEsfera(GLint textura, GLint raio);
+void desenhaDisco(GLint textura, GLdouble innerRadius,GLdouble outerRadius);
+void desenhaDiscoParcial(GLint textura, GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle);
+
+//Sem Textura
+void desenhaCilindroSemTXT(GLdouble baseRadius, GLdouble topRadius,GLdouble height);
+void desenhaEsferaSemTXT(GLint raio);
+void desenhaDiscoSemTXT(GLdouble innerRadius,GLdouble outerRadius);
+void desenhaDiscoParcialSemTXT(GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle);
+
+
+//Objeto do lado de fora
+void desenhaArvore(void);
 #endif

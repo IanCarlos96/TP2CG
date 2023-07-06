@@ -233,12 +233,13 @@ GLfloat high_shininess[] = { 100.0f };
 int main(int argc, char *argv[])
 {
     inicializa();
+
     glutInit(&argc, argv);
     glutInitWindowSize(640,480);
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Ortho vs Frustum");
+    glutCreateWindow("Era uma casa muito engracada...");
 
     glutReshapeFunc(redimensiona);
     //glutDisplayFunc(desenha);
@@ -273,6 +274,7 @@ int main(int argc, char *argv[])
     
    inicializaMateriaisParedes();
     //configuraIluminacao();
+        inicializaTextura();
     glutMainLoop();
 
     return EXIT_SUCCESS;

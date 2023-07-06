@@ -17,7 +17,8 @@ void configuraProjecao()
   // Conferir os valores daqui depois
   // glFrustum(-razaoAspecto, razaoAspecto, -1.0, 1.0, 2.0, 100.0);
   // glFrustum(min_width, max_width, min_height, max_height, min_depth, max_depth);
-  glOrtho(min_width, max_width, min_height, max_height, min_depth, max_depth);
+  //glOrtho(min_width, max_width, min_height, max_height, min_depth, max_depth);
+  gluPerspective(45.0f, razaoAspecto, -2, 300);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -84,7 +85,13 @@ void desenhaCenario()
   configuraProjecao();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+  camera.x = raioVisao * sin(phi) * cos(teta);  //coordenada x denotada em coordenadas esféricas
+  camera.z = raioVisao * sin(phi) * sin(teta); //coordenada z denotada em coordenadas esféricas
+  camera.y = raioVisao * cos(phi);          //coordenada y denotada em coordenadas esféricas
+
+  glLoadIdentity();
+  //gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
+  gluLookAt( xCursor+0, yCursor, zCursor+0, xCursor+camera.x, camera.y, zCursor+camera.z, 0, 1, 0); 
 
   desenhaChao();
 
@@ -200,20 +207,21 @@ void inicializaMateriaisParedes(void)
   marromFosco.brilhosidade[0] = 0;
 }
 
-void carregaTextura(int *textura, char *nomeDoArquivo)
-{
-  *textura = SOIL_load_OGL_texture(
-      nomeDoArquivo,
-      SOIL_LOAD_AUTO,
-      SOIL_CREATE_NEW_ID,
-      SOIL_FLAG_INVERT_Y);
 
-  if (*textura == 0)
-  {
-    printf("Erro ao carregar textura '%s': %s\n",
-           nomeDoArquivo,
-           SOIL_last_result());
-  }
+GLint carregaTextura(const char *arquivo)
+{
+    GLuint idTextura = SOIL_load_OGL_texture(
+        arquivo,
+        SOIL_LOAD_AUTO,
+        SOIL_CREATE_NEW_ID,
+        SOIL_FLAG_INVERT_Y);
+
+    if (idTextura == 0)
+    {
+        printf("Erro do SOIL: '%s'\n", SOIL_last_result());
+    }
+
+    return idTextura;
 }
 
 /// TODO: quando for enviar apagar a função abaixo deixei só como exemplo de configurar iluminação
@@ -753,8 +761,8 @@ void desenhaCone(GLint textura, GLdouble baseRadius, GLdouble height, GLint slic
 
 void inicializaTextura()
 {
-  carregaTextura(&texturaPlastico, "plastico.jpg");
-  carregaTextura(&texturaMadeira, "madeira.jpg");
-  carregaTextura(&texturaGrama, "grama.png");
-  carregaTextura(&texturaMoinho, "moinho.png");
+  texturaPlastico = carregaTextura("Imagens/plastico.jpg");
+  texturaMadeira = carregaTextura("Imagens/madeira.jpg");
+  texturaGrama = carregaTextura("Imagens/grama.png");
+  texturaMoinho = carregaTextura("Imagens/moinho.png");
 }

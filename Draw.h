@@ -56,9 +56,10 @@ void desenhaChao();
 
 void desenhaCasa();
 
+void desenhaArvore();
 void desenhaLadrilho(ladrilho parede, int direcao);
 void desenhaRetanguloSubdividido(int subdivisoes, int direcao);
-void carregaTextura(int *textura, char* nomeDoArquivo);
+GLint carregaTextura(const char* nomeDoArquivo);
 void inicializaMateriaisParedes(void);
 void desenhaCubo(void);
 void defMaterialMadeira();

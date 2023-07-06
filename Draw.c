@@ -92,18 +92,20 @@ void desenhaCenario()
   glPushMatrix();
   glTranslatef(0.0, 100.0, 0.0);
   glScalef(10.0, 10.0, 10.0);
+  glTranslatef(-8.0, 0.0, -12.0);
+  desenhaArvore();
+  glTranslatef(-5.0, 0.0, -13.0);
   desenhaArvore();
   glPopMatrix();
-  
-  //glScalef(30.0, 30.0, 30.0);
-  // desenhaChuveiro();
+
 
   glPushMatrix();
   glTranslatef(-250.0f, 200.0f, 100.0f);
   desenhaMoinho();
   glPopMatrix();
-
+  
   glutSwapBuffers();
+
 }
 
 /// Desenha um retângulo que está subdivido em retângulos menores em uma

@@ -213,10 +213,9 @@ void inicializaMateriaisParedes(void)
 
 void inicializaTexturas(){
 
-  //texturaPlastico = carregaTextura("plastico.jpg");
-  //texturaMadeira = carregaTextura("madeira.jpg");
-  texturaPlastico = carregaTextura("a.png");
-  texturaMadeira = carregaTextura("b.png");
+  texturaPlastico = carregaTextura("plastico.jpg");
+  texturaMadeira = carregaTextura("madeira.jpg");
+  
   
 
 }

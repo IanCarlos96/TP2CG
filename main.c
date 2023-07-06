@@ -98,8 +98,10 @@ int main(int argc, char *argv[])
     glutInitWindowPosition(10,10);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 
-    glutCreateWindow("Ortho vs Frustum");
+    glutCreateWindow("TP2 CG");
 
+
+    //glutWarpPointer(320, 240);
     glutReshapeFunc(redimensiona);
     //glutDisplayFunc(desenha);
     glutDisplayFunc(desenhaCenario);
@@ -114,6 +116,7 @@ int main(int argc, char *argv[])
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0); //Sol
     glEnable(GL_LIGHT1);
     glEnable(GL_LIGHT2);
@@ -121,7 +124,6 @@ int main(int argc, char *argv[])
     glEnable(GL_LIGHT4);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
 
     //GLLIGHT 0 FICAVA AQUI ANTES
     // glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);

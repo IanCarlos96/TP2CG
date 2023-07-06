@@ -27,13 +27,20 @@ void desenhaChao()
 {
 
   // Tem só o retângulo aqui. Ainda precisa setar o material, textura, etc
-  glColor3f(0.0, 1.0, 0.0);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, texturaGrama);
+  glColor3f(1.0, 1.0, 1.0);
   glBegin(GL_QUADS);
+  glTexCoord2f(0, 0);
   glVertex3f(min_width, min_height, min_depth);
+  glTexCoord2f(1, 0);
   glVertex3f(min_width, min_height, max_depth);
+  glTexCoord2f(1, 1);
   glVertex3f(max_width, min_height, max_depth);
+  glTexCoord2f(0, 1);
   glVertex3f(max_width, min_height, min_depth);
   glEnd();
+  glDisable(GL_TEXTURE_2D);
 }
 
 void desenhaCasa()
@@ -93,7 +100,14 @@ void desenhaCenario()
   desenhaMesa();
   glPopMatrix();
 
+
+  glPushMatrix();
+  glTranslatef(-250.0f, 200.0f, 100.0f);
+  desenhaMoinho();
+  glPopMatrix();
+  
   glutSwapBuffers();
+
 }
 
 /// Desenha um retângulo que está subdivido em retângulos menores em uma
@@ -304,6 +318,21 @@ void solidPartialDisk(GLdouble innerRadius, GLdouble outerRadius, GLdouble start
 
   gluDeleteQuadric(quadObj);
 }
+void solidCone(GLdouble baseRadius, GLdouble height, GLint slices, GLint stacks)
+{
+  // Cria uma quádrica
+  GLUquadric *quadObj = gluNewQuadric();
+  // Define o estilo de renderização para preenchido
+  gluQuadricDrawStyle(quadObj, GLU_FILL);
+  // Define as normais suavizadas para os vértices
+  gluQuadricNormals(quadObj, GLU_SMOOTH);
+  // Define as coordenadas de textura
+  gluQuadricTexture(quadObj, GL_TRUE);
+  // Cria os vértices do cone
+  gluCylinder(quadObj, baseRadius, 0.0, height, slices, stacks);
+  // Limpa as variáveis que a GLU usou para criar o cone
+  gluDeleteQuadric(quadObj);
+}
 
 void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius, GLdouble height)
 {
@@ -330,13 +359,19 @@ void desenhaEsfera(GLint textura, GLint raio)
 
 void desenhaDisco(GLint textura, GLdouble innerRadius, GLdouble outerRadius)
 {
+  glDisable(GL_LIGHTING);
   glColor3f(1, 1, 1);
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
   glEnable(GL_TEXTURE_2D);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glBindTexture(GL_TEXTURE_2D, textura);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glPolygonMode(GL_FRONT, GL_FILL);
   solidDisco(innerRadius, outerRadius, 50.0, 50.0);
+  glDisable(GL_BLEND);
+
   glDisable(GL_TEXTURE_2D);
 }
 
@@ -554,8 +589,6 @@ void desenhaParedePorta()
   glScalef(6.0, 30.0, 97.0);
   desenhaCubo();
   glPopMatrix();
-
-
 }
 
 void desenhaArvore(void)
@@ -640,13 +673,12 @@ void desenhaComodoTipo1()
   desenhaParedePorta();
   glPopMatrix();
 
-  //Desenha teto
+  // Desenha teto
   glPushMatrix();
   glTranslatef(0.0f, 98.0f, 100.0f);
   glScalef(97.0, 6.0, 97.0);
   desenhaCubo();
   glPopMatrix();
-
 }
 
 void inicializaFog(void)
@@ -656,16 +688,78 @@ void inicializaFog(void)
 
   glFogi(GL_FOG_MODE, GL_EXP);       // Linear, exp. ou exp²
   glFogfv(GL_FOG_COLOR, cor);        // Cor
-  glFogf(GL_FOG_DENSITY, 0.0f);     // Densidade
+  glFogf(GL_FOG_DENSITY, 0.0f);      // Densidade
   glHint(GL_FOG_HINT, GL_DONT_CARE); // Não aplicar se não puder
   glFogf(GL_FOG_START, 1.0f);        // Profundidade inicial
   glFogf(GL_FOG_END, 5.0f);          // Profundidade final
-     glEnable(GL_FOG); 
-             // Liga GL_FOG
+  glEnable(GL_FOG);
+  // Liga GL_FOG
 }
 
-void atualizaFog() {
-  
-    GLfloat densidade = intensidadeFog * 0.1f;
-    glFogf(GL_FOG_DENSITY, densidade);
+void atualizaFog()
+{
+
+  GLfloat densidade = intensidadeFog * 0.1f;
+  glFogf(GL_FOG_DENSITY, densidade);
+}
+
+void desenhaChuveiro()
+{
+  glColor3f(0.0, 0.0, 0.0);
+  glPushMatrix();
+  glPushMatrix();
+  glScalef(1.0, 1.0, 1.0);
+  desenhaCubo();
+  glPopMatrix();
+  glTranslatef(0.0, 1.0, 0.0);
+  desenhaCilindroSemTXT(0.3, 0.3, 10.0);
+  glPopMatrix();
+  glColor3f(1.0, 1.0, 1.0);
+}
+
+void desenhaMoinho()
+{
+
+  const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+  const double a = t * 90.0;
+
+  // desenhaPaMoinho();
+  glRotated(a, 0, 0, 1);
+  desenhaDisco(texturaMoinho, 10.0, 100.0);
+  glPushMatrix();
+  glRotated(180, 0, 1, 0);
+  glRotated(-a, 0, 0, 1);
+  desenhaDisco(texturaMoinho, 10.0, 100.0);
+  glPopMatrix();
+
+  glPopMatrix();
+
+  // Desenhe o corpo do moinho com textura
+  glPushMatrix();
+  glTranslatef(0.0f, 0.0f, 2.0f);
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glTranslatef(-250.0f, 0.0f, 100.0f);
+  glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
+  glScalef(50.0f, 50.0f, 50.0f);
+  desenhaCone(texturaMadeira, 1.0f, 4.0f, 20, 20);
+}
+
+void desenhaCone(GLint textura, GLdouble baseRadius, GLdouble height, GLint slices, GLint stacks)
+{
+  glColor3f(1, 1, 1);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, textura);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glPolygonMode(GL_FRONT, GL_FILL);
+  solidCone(baseRadius, height, slices, stacks);
+  glDisable(GL_TEXTURE_2D);
+}
+
+void inicializaTextura()
+{
+  carregaTextura(&texturaPlastico, "plastico.jpg");
+  carregaTextura(&texturaMadeira, "madeira.jpg");
+  carregaTextura(&texturaGrama, "grama.png");
+  carregaTextura(&texturaMoinho, "moinho.png");
 }

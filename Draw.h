@@ -15,7 +15,7 @@
 
 #define QUANT_SUBDIVISOES 20 
 
-int texturaPlastico, texturaMadeira;
+int texturaPlastico, texturaMadeira,texturaGrama, texturaMoinho;
 typedef struct coords {
   union {
       float v[4];
@@ -80,7 +80,7 @@ void desenhaCilindro(GLint textura, GLdouble baseRadius, GLdouble topRadius,GLdo
 void desenhaEsfera(GLint textura, GLint raio);
 void desenhaDisco(GLint textura, GLdouble innerRadius,GLdouble outerRadius);
 void desenhaDiscoParcial(GLint textura, GLdouble innerRadius, GLdouble outerRadius,GLdouble startAngle,GLdouble sweepAngle);
-
+void desenhaCone(GLint textura, GLdouble baseRadius, GLdouble height, GLint slices, GLint stacks);
 //Sem Textura
 void desenhaCilindroSemTXT(GLdouble baseRadius, GLdouble topRadius,GLdouble height);
 void desenhaEsferaSemTXT(GLint raio);
@@ -90,6 +90,9 @@ void desenhaDiscoParcialSemTXT(GLdouble innerRadius, GLdouble outerRadius,GLdoub
 
 //Objeto do lado de fora
 void desenhaArvore(void);
+void desenhaMoinho(void);
+//Objeto lado de dentro
+void desenhaChuveiro();
 void desenhaMesa(void);
 //Neblina
 void atualizaFog();

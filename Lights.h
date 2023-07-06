@@ -11,6 +11,8 @@
 #define intensity_UP 1
 #define intensity_DOWN 0
 
+#define lights_height_intern 99
+
 GLfloat light_intensity_sun;
 
 GLfloat light_ambient[4];
@@ -18,8 +20,9 @@ GLfloat light_diffuse[4];
 GLfloat light_specular[4];
 GLfloat light_position[4];
 
+
 void inicializaSol();
-void inicializaLuzes();
+void inicializaLuzesInternas();
 void alteraIntensidadeSol(GLint change);
 
 void configuraProjecao();

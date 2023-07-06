@@ -38,7 +38,7 @@ void inicializa(){
     zCursor = 550.0;
 
     inicializaSol();
-    inicializaLuzes();
+    inicializaLuzesInternas();
 }
 
 void controleDeCamera(GLint x, GLint y){

@@ -6,9 +6,6 @@
 #include "Draw.c"
 #include "Lights.c"
 
-static int slices = 160;
-static int stacks = 160;
-
 
 void redimensiona(int width, int height)
 {

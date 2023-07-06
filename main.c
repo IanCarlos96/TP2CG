@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
     
    inicializaMateriaisParedes();
     //configuraIluminacao();
-        inicializaTextura();
+    inicializaTextura();
     glutMainLoop();
 
     return EXIT_SUCCESS;

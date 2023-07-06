@@ -1,12 +1,101 @@
 #include "Draw.h"
 #include "Cams.c"
 // #include "Lights.c"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 material plasticoAzul, marromFosco;
 ladrilho ladrilhos[4];
 ponto posicaoDaLuz;
 
 int texturaPlastico, texturaMadeira;
+
+// === CARREGANDO OBJ
+typedef struct {
+    float x;
+    float y;
+    float z;
+} Vec3;
+
+typedef struct {
+    Vec3* vertices;
+    unsigned int* vertexIndices;
+    unsigned int vertexCount;
+    unsigned int indexCount;
+} OBJData;
+
+OBJData loadOBJ(const char* path) {
+    OBJData objData;
+    objData.vertexCount = 0;
+    objData.indexCount = 0;
+    objData.vertices = NULL;
+    objData.vertexIndices = NULL;
+
+    FILE* file = fopen(path, "r");
+    if (file == NULL) {
+        printf("Falha ao abrir o arquivo.\n");
+        return objData;
+    }
+
+    char lineHeader[128];
+    while (fscanf(file, "%s", lineHeader) != EOF) {
+        if (strcmp(lineHeader, "v") == 0) {
+            Vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+
+            objData.vertexCount++;
+            objData.vertices = (Vec3*)realloc(objData.vertices, objData.vertexCount * sizeof(Vec3));
+            objData.vertices[objData.vertexCount - 1] = vertex;
+        }
+        else if (strcmp(lineHeader, "f") == 0) {
+            unsigned int vertexIndex[3];
+            fscanf(file, "%d %d %d\n", &vertexIndex[0], &vertexIndex[1], &vertexIndex[2]);
+
+            objData.indexCount += 3;
+            objData.vertexIndices = (unsigned int*)realloc(objData.vertexIndices, objData.indexCount * sizeof(unsigned int));
+            objData.vertexIndices[objData.indexCount - 3] = vertexIndex[0];
+            objData.vertexIndices[objData.indexCount - 2] = vertexIndex[1];
+            objData.vertexIndices[objData.indexCount - 1] = vertexIndex[2];
+        }
+    }
+
+    fclose(file);
+    return objData;
+} OBJData objData;
+
+// Não sei se é preciso utilizar 
+void render() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, objData.vertices);
+    glDrawElements(GL_TRIANGLES, objData.indexCount, GL_UNSIGNED_INT, objData.vertexIndices);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glutSwapBuffers();
+}
+
+// Modela o Objeto, já desenhando e passadno seuas configurações de escala, trasnlacao etc
+void desenhaOBJ(OBJData objeto, int sX, int sY, int sZ, int tX, int tY, int tZ, float angle){
+  glPushMatrix();
+
+  // Aplicar transformações de escala, translação e rotação
+  glTranslatef(tX, tY, tZ);
+  glRotatef(angle, 0.0f, 1.0f, 0.0f);
+  glScalef(sX, sY, sZ);
+
+  // Configurar os arrays de vértices e índices
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glVertexPointer(3, GL_FLOAT, 0, objeto.vertices);
+
+  // Desenhar os triângulos usando os índices
+  glDrawElements(GL_TRIANGLES, objeto.indexCount, GL_UNSIGNED_INT, objeto.vertexIndices);
+
+  // Desabilitar o array de vértices
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  glPopMatrix();
+}
 
 void configuraProjecao()
 {
@@ -608,4 +697,7 @@ void desenhaComodoTipo1()
   defMaterialMadeira();
   glTranslatef(-100.0f, 0.0f, 100.0f);
   glPopMatrix();
+
+  OBJData bed = loadOBJ("obj/bed.obj");
+  desenhaOBJ(bed, 1, 1, 1, 1, 1, 1, 1.0);
 }

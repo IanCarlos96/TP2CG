@@ -89,6 +89,8 @@ void desenhaCenario()
   desenhaArvore();
   glTranslatef(-5.0, 0.0, -13.0);
   desenhaArvore();
+  glTranslatef(9.0, -12.0, 4.0);
+  desenhaMesa();
   glPopMatrix();
 
   glutSwapBuffers();
@@ -572,6 +574,35 @@ void desenhaArvore(void)
   glPopMatrix();
   glPopMatrix();
 }
+
+void desenhaMesa(void)
+{
+  glPushMatrix();
+  glRotatef(90.0, 1.0, 0.0, 0.0);
+  glTranslatef(0, 0, -5.0);
+  desenhaCilindro(texturaMadeira, 0.5, 0.5, 3.0);
+  glColor3f(0.0f, 0.8f, 0.0f);
+  
+  glPushMatrix();
+  glScalef(3.0, 3.0, 0.2);
+  desenhaCubo();
+  glPopMatrix();
+
+  glPushMatrix();
+  glTranslatef(0, -6, 3);
+  glScalef(3.0, 0.6, 1);
+  desenhaCubo();
+  glPopMatrix();
+
+  glPushMatrix();
+  glTranslatef(0, -6.9, 3);
+  glScalef(3.0, 0.5, 2);
+  desenhaCubo();
+  glPopMatrix();
+
+  glPopMatrix();
+}
+
 void inicializaTextura()
 {
   carregaTextura(&texturaPlastico, "plastico.jpg");

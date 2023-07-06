@@ -90,7 +90,7 @@ void desenhaDiscoParcialSemTXT(GLdouble innerRadius, GLdouble outerRadius,GLdoub
 
 //Objeto do lado de fora
 void desenhaArvore(void);
-
+void desenhaMesa(void);
 //Neblina
 void atualizaFog();
 void inicializaFog();

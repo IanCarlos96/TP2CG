@@ -6,7 +6,7 @@ material plasticoAzul, marromFosco;
 ladrilho ladrilhos[4];
 ponto posicaoDaLuz;
 GLfloat intensidadeFog = 0;
-GLint texturaPlastico, texturaMadeira;
+GLint texturaPlastico, texturaMadeira, texturaBola;
 
 void configuraProjecao()
 {
@@ -94,18 +94,42 @@ void desenhaCenario()
   //gluLookAt(camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ);
   gluLookAt( xCursor+0, yCursor, zCursor+0, xCursor+camera.x, camera.y, zCursor+camera.z, 0, 1, 0); 
 
+  glPushMatrix();
+  glTranslatef(0, -50, 0);
   desenhaChao();
+  glPopMatrix();
 
+  glPushMatrix();
+  glTranslatef(0, -40.0, 0);
   desenhaCasa();
+  glPopMatrix();
+
+  
   glPushMatrix();
   glTranslatef(0.0, 100.0, 0.0);
   glScalef(10.0, 10.0, 10.0);
   glTranslatef(-8.0, 0.0, -12.0);
+
+  glPushMatrix();
+  glTranslatef(0, -10, 0);
   desenhaArvore();
-  glTranslatef(-5.0, 0.0, -13.0);
+  glPopMatrix();
+  
+  glPushMatrix();
+  glTranslatef(-12, -10, -15);
   desenhaArvore();
+  glPopMatrix();
+  
+  
   glTranslatef(9.0, -12.0, 4.0);
+  glPushMatrix();
+  glTranslatef(0, -10, 0);
   desenhaMesa();
+  glPopMatrix();
+  
+  
+  
+  
   glPopMatrix();
 
 
@@ -628,11 +652,13 @@ void desenhaMesa(void)
   desenhaCilindro(texturaMadeira, 0.5, 0.5, 3.0);
   glColor3f(0.0f, 0.8f, 0.0f);
   
+  glColor3f(0,0,0);
   glPushMatrix();
   glScalef(3.0, 3.0, 0.2);
   desenhaCubo();
   glPopMatrix();
 
+  glColor3f(0,0,0);
   glPushMatrix();
   glTranslatef(0, -6, 3);
   glScalef(3.0, 0.6, 1);
@@ -724,6 +750,16 @@ void desenhaChuveiro()
   glColor3f(1.0, 1.0, 1.0);
 }
 
+void desenhaBola(){
+
+   glPushMatrix();
+   glTranslatef(-400.0f, -70.0f, 100.0f);
+   glRotated(180, 0, 1, 0);
+  desenhaEsfera(texturaBola, 20);
+  glPopMatrix();
+   
+}
+
 void desenhaMoinho()
 {
 
@@ -745,10 +781,10 @@ void desenhaMoinho()
   glPushMatrix();
   glTranslatef(0.0f, 0.0f, 2.0f);
   glColor3f(1.0f, 1.0f, 1.0f);
-  glTranslatef(-250.0f, 0.0f, 100.0f);
+  glTranslatef(-250.0f, -135.0f, 100.0f);
   glRotatef(90.0f, -1.0f, 0.0f, 0.0f);
   glScalef(50.0f, 50.0f, 50.0f);
-  desenhaCone(texturaMadeira, 1.0f, 4.0f, 20, 20);
+  desenhaCone(texturaMadeira, 1.0f, 7.0f, 20, 20);
 }
 
 void desenhaCone(GLint textura, GLdouble baseRadius, GLdouble height, GLint slices, GLint stacks)

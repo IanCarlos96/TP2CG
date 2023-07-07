@@ -15,7 +15,7 @@
 
 #define QUANT_SUBDIVISOES 20 
 
-int texturaPlastico, texturaMadeira,texturaGrama, texturaMoinho;
+int texturaPlastico, texturaMadeira,texturaGrama, texturaMoinho, texturaBola;
 typedef struct coords {
   union {
       float v[4];
@@ -95,6 +95,7 @@ void desenhaMoinho(void);
 //Objeto lado de dentro
 void desenhaChuveiro();
 void desenhaMesa(void);
+void desenhaBola();
 //Neblina
 void atualizaFog();
 void inicializaFog();

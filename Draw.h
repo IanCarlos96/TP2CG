@@ -62,8 +62,6 @@ void desenhaRetanguloSubdividido(int subdivisoes, int direcao);
 GLint carregaTextura(const char* nomeDoArquivo);
 void inicializaMateriaisParedes(void);
 void desenhaCubo(void);
-void defMaterialMadeira();
-void defMaterialPlastico();
 void desenhaCuboComTextura(GLint textureID);
 void desenhaParedePorta();
 void desenhaComodoTipo1();
@@ -99,4 +97,9 @@ void desenhaBola();
 //Neblina
 void atualizaFog();
 void inicializaFog();
+//Materiais
+void defMaterialAzul();
+void defMaterialVermelho();
+void defMaterialBranco();
+void defMaterialVerde();
 #endif

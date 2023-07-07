@@ -2,7 +2,7 @@
 #include "Cams.c"
 // #include "Lights.c"
 
-material plasticoAzul, marromFosco;
+material materialAzul, materialVermelho, materialBranco, materialVerde;
 ladrilho ladrilhos[4];
 ponto posicaoDaLuz;
 GLfloat intensidadeFog = 0;
@@ -50,24 +50,28 @@ void desenhaCasa()
   glColor3f(1.0f, 0.0f, 0.0f);
   glPushMatrix();
   glTranslatef(0.0, 0.0, 0.0);
+  defMaterialVermelho();
   desenhaComodoTipo1();
   glPopMatrix();
 
   glColor3f(0.0f, 1.0f, 0.0f);
   glPushMatrix();
   glTranslatef(212.0, 0.0, 0.0);
+  defMaterialVerde();
   desenhaComodoTipo1();
   glPopMatrix();
 
   glColor3f(0.0f, 0.0f, 1.0f);
   glPushMatrix();
   glTranslatef(424.0, 0.0, 0.0);
+  defMaterialAzul();
   desenhaComodoTipo1();
   glPopMatrix();
 
   glColor3f(1.0f, 1.0f, 1.0f);
   glPushMatrix();
   glTranslatef(636.0, 0.0, 0.0);
+  defMaterialBranco();
   desenhaComodoTipo1();
   glPopMatrix();
 
@@ -219,17 +223,29 @@ void desenhaLadrilho(ladrilho l, int direcao)
 void inicializaMateriaisParedes(void)
 {
   // glEnable(GL_LIGHTING);//Estava comentado no exemplo, não sei o pq
-  plasticoAzul.ambiente = (cor){0.25, 0.25, 0.25, 1};
-  plasticoAzul.emissiva = (cor){0, 0, 0, 1};
-  plasticoAzul.difusa = (cor){0.1, 0.1, 0.4, 1};
-  plasticoAzul.especular = (cor){1, 1, 1, 1};
-  plasticoAzul.brilhosidade[0] = 100;
+  materialAzul.ambiente = (cor){0.25, 0.25, 0.25, 1};
+  materialAzul.emissiva = (cor){0, 0, 0, 1};
+  materialAzul.difusa = (cor){0.1, 0.1, 0.4, 1};
+  materialAzul.especular = (cor){1, 1, 1, 1};
+  materialAzul.brilhosidade[0] = 100;
 
-  marromFosco.ambiente = (cor){0.1, 0.1, 0.1, 1};
-  marromFosco.emissiva = (cor){0, 0, 0, 1};
-  marromFosco.difusa = (cor){.49, .22, .02, 1};
-  marromFosco.especular = (cor){0, 0, 0, 1};
-  marromFosco.brilhosidade[0] = 0;
+  materialVermelho.ambiente = (cor){0.1, 0.1, 0.1, 1};
+  materialVermelho.emissiva = (cor){0, 0, 0, 1};
+  materialVermelho.difusa = (cor){.49, .22, .02, 1};
+  materialVermelho.especular = (cor){0, 0, 0, 1};
+  materialVermelho.brilhosidade[0] = 0;
+
+  materialBranco.ambiente = (cor){0.1, 0.1, 0.1, 1};
+  materialBranco.emissiva = (cor){0, 0, 0, 1};
+  materialBranco.difusa = (cor){.49, .22, .02, 1};
+  materialBranco.especular = (cor){0, 0, 0, 1};
+  materialBranco.brilhosidade[0] = 0;
+
+  materialVermelho.ambiente = (cor){0.1, 0.1, 0.1, 1};
+  materialVermelho.emissiva = (cor){0, 0, 0, 1};
+  materialVermelho.difusa = (cor){.49, .22, .02, 1};
+  materialVermelho.especular = (cor){0, 0, 0, 1};
+  materialVermelho.brilhosidade[0] = 0;
 }
 
 
@@ -503,17 +519,33 @@ void desenhaCubo()
   }
   glEnd();
 }
-void defMaterialPlastico()
+void defMaterialAzul()
 {
-  material materialUtilizado = (plasticoAzul);
+  material materialUtilizado = (materialAzul);
   glMaterialfv(GL_FRONT, GL_AMBIENT, materialUtilizado.ambiente.v);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, materialUtilizado.difusa.v);
   glMaterialfv(GL_FRONT, GL_SPECULAR, materialUtilizado.especular.v);
   glMaterialfv(GL_FRONT, GL_SHININESS, materialUtilizado.brilhosidade);
 }
-void defMaterialMadeira()
+void defMaterialVermelho()
 {
-  material materialUtilizado = (marromFosco);
+  material materialUtilizado = (materialVermelho);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, materialUtilizado.ambiente.v);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, materialUtilizado.difusa.v);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, materialUtilizado.especular.v);
+  glMaterialfv(GL_FRONT, GL_SHININESS, materialUtilizado.brilhosidade);
+}
+void defMaterialBranco()
+{
+  material materialUtilizado = (materialBranco);
+  glMaterialfv(GL_FRONT, GL_AMBIENT, materialUtilizado.ambiente.v);
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, materialUtilizado.difusa.v);
+  glMaterialfv(GL_FRONT, GL_SPECULAR, materialUtilizado.especular.v);
+  glMaterialfv(GL_FRONT, GL_SHININESS, materialUtilizado.brilhosidade);
+}
+void defMaterialVerde()
+{
+  material materialUtilizado = (materialVerde);
   glMaterialfv(GL_FRONT, GL_AMBIENT, materialUtilizado.ambiente.v);
   glMaterialfv(GL_FRONT, GL_DIFFUSE, materialUtilizado.difusa.v);
   glMaterialfv(GL_FRONT, GL_SPECULAR, materialUtilizado.especular.v);
@@ -681,13 +713,11 @@ void desenhaComodoTipo1()
 
   glTranslatef(0.0f, 0.0f, 0.0f);
   glScalef(97.0, 97.0, 6.0);
-  defMaterialPlastico();
   desenhaCubo();
   glPopMatrix();
 
   // Parece2
   glPushMatrix();
-  defMaterialMadeira();
   glTranslatef(100.0f, 0.0f, 100.0f);
   desenhaParedePorta();
   glPopMatrix();
@@ -696,12 +726,10 @@ void desenhaComodoTipo1()
   glPushMatrix();
   glTranslatef(0.0f, 0.0f, 200.0f);
   glScalef(97.0, 97.0, 6.0);
-  defMaterialMadeira();
   desenhaCubo();
   glPopMatrix();
 
   glPushMatrix();
-  defMaterialMadeira();
   glTranslatef(-100.0f, 0.0f, 100.0f);
   desenhaParedePorta();
   glPopMatrix();

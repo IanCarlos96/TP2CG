@@ -39,6 +39,7 @@ void inicializa(){
 
     inicializaSol();
     inicializaLuzesInternas();
+
 }
 
 void controleDeCamera(GLint x, GLint y){

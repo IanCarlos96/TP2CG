@@ -47,22 +47,22 @@ static void teclado(unsigned char key, int x, int y)
             //camX, camY, camZ, centerX, centerY, centerZ, vectorX, vectorY, vectorZ
         case 'w':
         case 'W':
-            xCursor--;
+            xCursor-=2;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'S':
         case 's':
-            xCursor++;
+            xCursor+=2;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'A':
         case 'a':
-            zCursor++;
+            zCursor+=2;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'D':
         case 'd':
-            zCursor--;
+            zCursor-=2;
             printf("[%f %f %f]Cam\n[%f %f %f]Center\n", camera.x, camera.y, camera.z, xCursor+camera.x, yCursor+camera.y, zCursor+camera.z);
             break;
         case 'o'://aumenta fog
@@ -118,15 +118,14 @@ int main(int argc, char *argv[])
 
     //glutWarpPointer(320, 240);
     glutReshapeFunc(redimensiona);
-    //glutDisplayFunc(desenha);
     glutDisplayFunc(desenhaCenario);
     glutKeyboardFunc(teclado);
     glutPassiveMotionFunc(controleDeCamera);
     glutIdleFunc(atoa);
 
     glClearColor(1,1,1,1);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -140,12 +139,6 @@ int main(int argc, char *argv[])
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
 
-    //GLLIGHT 0 FICAVA AQUI ANTES
-    // glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
-    // glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    // glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-
     //glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, light_attenuation_constant);
 
     glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
@@ -154,9 +147,11 @@ int main(int argc, char *argv[])
     glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);
     
     inicializaMateriaisParedes();
-    //configuraIluminacao();
+    configuraIluminacao();
     inicializaTextura();
     inicializaFog();
+    xMouse = glutGet(GLUT_WINDOW_WIDTH)/2;
+    yMouse = glutGet(GLUT_WINDOW_HEIGHT)/2;
     glutMainLoop();
 
     return EXIT_SUCCESS;

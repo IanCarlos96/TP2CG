@@ -6,12 +6,12 @@
 #ifndef draw_h
 #define draw_h
 
-#define min_depth -500
-#define max_depth 500
-#define min_width -500
-#define max_width 500
+#define min_depth -5000
+#define max_depth 5000
+#define min_width -5000
+#define max_width 5000
 #define max_height 500
-#define min_height -1
+#define min_height -80
 
 #define QUANT_SUBDIVISOES 20 
 

@@ -18,7 +18,8 @@ void configuraProjecao()
   // glFrustum(-razaoAspecto, razaoAspecto, -1.0, 1.0, 2.0, 100.0);
   // glFrustum(min_width, max_width, min_height, max_height, min_depth, max_depth);
   //glOrtho(min_width, max_width, min_height, max_height, min_depth, max_depth);
-  gluPerspective(45.0f, razaoAspecto, -2, 300);
+  //gluPerspective(90.0f, razaoAspecto, -100, 400);
+  gluPerspective(45.0f, razaoAspecto, 400, -1000);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -71,13 +72,13 @@ void desenhaCasa()
   glPopMatrix();
 
   // piso geral
-  glColor3f(0, 0, 0);
-  glBegin(GL_QUADS);
-  glVertex3f(0, 0, 0);
-  glVertex3f(300, 0, 0);
-  glVertex3f(300, 0, 300);
-  glVertex3f(0, 0, 300);
-  glEnd();
+  // glColor3f(0, 0, 0);
+  // glBegin(GL_QUADS);
+  // glVertex3f(0, -79, 0);
+  // glVertex3f(300, -79, 0);
+  // glVertex3f(300, -79, 300);
+  // glVertex3f(0,-79, 300);
+  // glEnd();
 }
 
 void desenhaCenario()
@@ -228,7 +229,9 @@ GLint carregaTextura(const char *arquivo)
 void configuraIluminacao()
 {
   // glEnable(GL_LIGHTING);
-
+  inicializaSol();
+  inicializaLuzesInternas();
+  /*
   posicaoDaLuz = (ponto){0, 0, -1, 1};
   cor corDaLuz = {1.0, 1.0, 1.0, 1.0};
   glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -243,6 +246,7 @@ void configuraIluminacao()
 
   glEnable(GL_LIGHT0);
   glEnable(GL_DEPTH_TEST);
+  */
 }
 
 // Desenha uma esfera na origem, com certo raio e subdivisões
@@ -367,7 +371,7 @@ void desenhaEsfera(GLint textura, GLint raio)
 
 void desenhaDisco(GLint textura, GLdouble innerRadius, GLdouble outerRadius)
 {
-  glDisable(GL_LIGHTING);
+  
   glColor3f(1, 1, 1);
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
   glEnable(GL_TEXTURE_2D);
@@ -732,7 +736,7 @@ void desenhaMoinho()
   glPushMatrix();
   glRotated(180, 0, 1, 0);
   glRotated(-a, 0, 0, 1);
-  desenhaDisco(texturaMoinho, 10.0, 100.0);
+  //desenhaDisco(texturaMoinho, 10.0, 100.0);
   glPopMatrix();
 
   glPopMatrix();

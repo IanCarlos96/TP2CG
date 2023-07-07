@@ -3,36 +3,6 @@
 
 void inicializa(){
 
-    // camX = 150.0;
-    // camY = 10.0; 
-    // camZ = -150.0;
-    // centerX = 150.0;
-    // centerY = 10.0; 
-    // centerZ = 0.0;
-    // vectorX = 0.0;
-    // vectorY = 1.0;
-    // vectorZ = 0.0;
-
-    // camX = 0.0;
-    // camY = 1.0; 
-    // camZ = 00.0;
-    // centerX = 0.0;
-    // centerY = 0.0; 
-    // centerZ = 0.0;
-    // vectorX = 0.0;
-    // vectorY = 1.0;
-    // vectorZ = 0.0;
-
-    // camX = 0.0;
-    // camY = 50.0; 
-    // camZ = 100.0;
-    // centerX = 0.0;
-    // centerY = 0.0; 
-    // centerZ = 0.0;
-    // vectorX = 0.0;
-    // vectorY = 50.0;
-    // vectorZ = 0.0;
-
     xCursor = 0.0;
     yCursor = 50.0; 
     zCursor = 550.0;
